@@ -5,18 +5,19 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "DEVICE")
-data class Device( @Id
-                   @GeneratedValue(strategy = GenerationType.IDENTITY)
-                   val id: Long,
-                   @Column(unique = true)
-                   var serialNumber: String,
-                   var uuid: String,
-                   var phoneNumber: String,
-                   var model: String,
-                   @ManyToOne
-                   @JoinColumn(name = "user_id", nullable = false)
-                   @JsonBackReference
-                   var user: User?
+data class Device(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    @Column(unique = true)
+    var serialNumber: String,
+    var uuid: String,
+    var phoneNumber: String,
+    var model: String,
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    var user: User?
 ) {
     override fun hashCode(): Int {
         return id.hashCode()

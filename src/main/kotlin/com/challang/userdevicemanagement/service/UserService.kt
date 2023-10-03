@@ -3,20 +3,22 @@ package com.challang.userdevicemanagement.service
 import com.challang.userdevicemanagement.dto.DeviceDto
 import com.challang.userdevicemanagement.dto.UserDto
 import com.challang.userdevicemanagement.entity.User
+import com.challang.userdevicemanagement.exception.SerialNumberNotUniqException
 import com.challang.userdevicemanagement.exception.UserNotFoundException
 import com.challang.userdevicemanagement.repository.DeviceRepository
 import com.challang.userdevicemanagement.repository.UserRepository
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Slf4j
 @Service
-class UserService(private val userRepository: UserRepository,
-                  private val deviceRepository: DeviceRepository
+class UserService(
+    private val userRepository: UserRepository,
+    private val deviceRepository: DeviceRepository
 ) {
     private val log: Logger = LoggerFactory.getLogger(UserService::class.java)
 
@@ -34,7 +36,6 @@ class UserService(private val userRepository: UserRepository,
             .orElseThrow { UserNotFoundException(id) }
     }
 
-    @Transactional
     fun add(userDto: UserDto): UserDto {
         val user = UserDto.convertToUser(userDto)
         log.debug("created a new user ")
@@ -49,27 +50,28 @@ class UserService(private val userRepository: UserRepository,
         log.info("delete User by id {}", id)
     }
 
-    @Transactional
-    fun addDevice(userId: Long, deviceDto: DeviceDto) {
+    //    @Transactional
+    fun assignDevice(userId: Long, deviceDto: DeviceDto) {
         val user = userRepository.findById(userId).orElse(null)
         log.info("assign device to User")
         if (user != null) {
             val device = DeviceDto.convertToDevice(deviceDto)
             device.user = user
             user.devices.add(device)
-            val savedDevice = deviceRepository.save(device)
-            DeviceDto.convertToDeviceDto(savedDevice)
+            try {
+                val savedDevice = deviceRepository.save(device)
+                DeviceDto.convertToDeviceDto(savedDevice)
+            } catch (ex: DataIntegrityViolationException) {
+                throw SerialNumberNotUniqException(deviceDto.serialNumber)
+            }
         }
         log.info("assigned device to User")
     }
 
-    fun findUsersDevices(): List<Map<String, Any>> {
-        val users = userRepository.findAllUsersDevices()
-        log.info("find all assigned device to User")
-        return findAllUserDevices(users)
-    }
-    fun findAllUsersDevices(pageNumber: Int,
-                            pageSize: Int): List<Map<String, Any>> {
+    fun findAllUsersDevices(
+        pageNumber: Int,
+        pageSize: Int
+    ): List<Map<String, Any>> {
         val pageable = PageRequest.of(pageNumber - 1, pageSize)
         val users = userRepository.findAllUsersDevices(pageable)
         log.info("find pageable assigned device to User")
