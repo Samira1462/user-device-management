@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Slf4j
 @Service
@@ -36,6 +37,7 @@ class UserService(
             .orElseThrow { UserNotFoundException(id) }
     }
 
+    @Transactional
     fun add(userDto: UserDto): UserDto {
         val user = UserDto.convertToUser(userDto)
         log.debug("created a new user ")
@@ -50,7 +52,7 @@ class UserService(
         log.info("delete User by id {}", id)
     }
 
-    //    @Transactional
+    @Transactional
     fun assignDevice(userId: Long, deviceDto: DeviceDto) {
         val user = userRepository.findById(userId).orElse(null)
         log.info("assign device to User")
@@ -112,5 +114,4 @@ class UserService(
 
         return maps()
     }
-
 }
