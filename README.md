@@ -7,16 +7,7 @@ This document serves as a guide for the Backend Coding Challenge project, where 
 ## Endpoints
 The project requires the implementation of the following endpoints:
 
-1. **Create a Device**
-    - Endpoint: `POST /devices`
-    - Request Body:
-        - Serial Number (String)
-        - UUID
-        - Phone Number
-        - Model (String)
-    - Description: This endpoint allows the creation of a new device by providing its details.
-
-2. **Create a User**
+1. **Create a User**
     - Endpoint: `POST /users`
     - Request Body:
         - First Name
@@ -25,18 +16,18 @@ The project requires the implementation of the following endpoints:
         - Birthday
     - Description: This endpoint enables the creation of a new user with their personal information.
 
-3. **Assign a Device to a User**
+2. **Assign a Device to a User**
     - Endpoint: `POST /paged/devices`
     - Path Parameters:
         - userId: The ID of the user to whom the device should be assigned.
         - deviceDto: The deviceDto to user assigned.
     - Description: This endpoint assigns a device to a specific user.
 
-4. **List All Users with Devices**
+3. **List All Users with Devices**
     - Endpoint: `GET /users/paged/devices`
     - Description: This endpoint retrieves a list of all users along with the devices assigned to them.
    
-5.**List All Users with Devices**
+4.**List All Users with Devices**
    - Endpoint: `GET /users`
    - Description: This endpoint retrieves a list of all users.
 
@@ -44,7 +35,7 @@ The project requires the implementation of the following endpoints:
 The project uses the following technologies:
 
 - **SpringBoot**: A popular Java framework for building web applications and RESTful services.
-- **Kotlin**: A statically-typed programming language that runs on the Java Virtual Machine (JVM) and is fully interoperable with Java.
+- **Kotlin**: A statically typed programming language that runs on the Java Virtual Machine (JVM) and is fully interoperable with Java.
 - **H2 Database**: An in-memory relational database, suitable for development and testing purposes.
 
 ## Getting Started
