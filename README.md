@@ -1,5 +1,5 @@
 # user-device-management
-# Backend Coding Challenge Readme
+# Backend Coding Challenge
 
 ## Introduction
 This document serves as a guide for the Backend Coding Challenge project, where the task is to create a small SpringBoot application with Kotlin that provides various endpoints for managing devices and users. The application should use an H2 database for simplicity.
