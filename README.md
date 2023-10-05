@@ -42,6 +42,7 @@ The project uses the following technologies:
 To get started with the Backend Coding Challenge, follow these steps:
 
 1. **Clone the Repository**
+    ```sh 
    https://github.com/Samira1462/user-device-management
 
 2.**Access the Application**
